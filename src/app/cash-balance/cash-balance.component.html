@@ -1,0 +1,292 @@
+<div class="my-element">
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Columna de la tabla (75%) -->
+            <div class="col-md-9 d-flex align-items-start">
+
+                <div class=" card flex-grow-1 p-3">
+                    <h3 class="text-center">Cierres de caja</h3>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Turno</th>
+                                        <th scope="col">Personal</th>
+                                        <th scope="col">Caja inicial</th>
+                                        <th scope="col">Efect. inicial</th>
+                                        <th scope="col">V. Efectivo</th>
+                                        <th scope="col">V. Tarjeta</th>
+                                        <th scope="col">V. Transf</th>
+                                        <th scope="col">V. QR</th>
+                                        <th scope="col">T. Entradas</th>
+                                        <th scope="col">T.V. Sistema</th>
+                                        <th scope="col">Control</th>
+                                        <th scope="col">Caja final</th>
+                                        <th scope="col">Gasto efect.</th>
+                                        <th scope="col">G. no Efect.</th>
+                                        <th scope="col">T. Salidas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let balance of cashBalance" (click)="openBalanceDetail(balance)">
+                                        <th scope="row">{{balance.date}}</th>
+                                        <th scope="row">{{balance.shift}}</th>
+                                        <td>{{balance.employeeName}} </td>
+                                        <td>{{balance.openingCashBalance}}</td>
+                                        <td>{{balance.openingCashOnHand}}</td>
+                                        <td>{{balance.cashSales}}</td>
+                                        <td>{{balance.cardSales}}</td>
+                                        <td>{{balance.transferSales}}</td>
+                                        <td>{{balance.qrSales}}</td>
+                                        <th scope="row">{{balance.totalSales}}</th>
+                                        <td>{{balance.systemTotalSales}}</td>
+                                        <td
+                                            [ngClass]="{'text-success': balance.control >= 0, 'text-danger': balance.control < 0}">
+                                            {{balance.control}}</td>
+                                        <td
+                                            [ngClass]="{'text-success': balance.endingCashBalance >= 0, 'text-danger': balance.endingCashBalance < 0}">
+                                            {{balance.endingCashBalance}} </td>
+                                        <td>{{balance.cashPayments}}</td>
+                                        <td>{{balance.otherPayments}}</td>
+                                        <th scope="row">{{balance.totalPayments}}</th>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm"
+                                                (click)="deleteCashBalance(balance.id)">
+                                                Eliminar
+                                            </button>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna del formulario (25%) -->
+            <div class="col-md-3 d-flex flex-column align-items-center">
+
+                <!-- Card Cierre por fecha y turno -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                            <h5 class="text-center">Cierre por fecha y Turno</h5>
+                            <form (ngSubmit)="searchByDateAndShift()" class="row g-3">
+
+                                <div class="col-sm-12">
+                                    <input type="date" name="searchDate" class="form-control text-center"
+                                        [(ngModel)]="searchDate" name="searchDate" placeholder="dd-mm-aaaa"
+                                        aria-label="Fecha">
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <select [(ngModel)]="searchShift" name="searchShift"
+                                        class="form-select text-center">
+                                        <option value="" disabled selected hidden>Seleccione un turno</option>
+                                        <option value="Mañana">Mañana</option>
+                                        <option value="Tarde">Tarde</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-warning">Ver
+                                    Cierre</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Cierre por fecha -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                            <h5 class="text-center">Cierre por fecha</h5>
+                            <div class="row g-3">
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control text-center" [(ngModel)]="date"
+                                        aria-label="Fecha">
+                                </div>
+
+                                <button type="submit" class="btn btn-warning" (click)="searchBalancesByDate()">Ver
+                                    Cierre</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Cierre por turno -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                            <h5 class="text-center">Cierre por Turno</h5>
+                            <div class="row g-3">
+
+                                <div class="col-sm-12">
+                                    <select [(ngModel)]="shift" class="form-select text-center">
+                                        <option value="" disabled selected hidden>Seleccione un turno</option>
+                                        <option value="Mañana">Mañana</option>
+                                        <option value="Tarde">Tarde</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-warning" (click)="searchBalanceByShift()">Ver
+                                    Cierre</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Modal to show cash balance-->
+    <div class="modal fade show overlay" *ngIf="showBalance" tabindex="-1">
+        <div class="card balance-card p-3">
+            <div class="row g-1">
+
+                <h5 class="text-center">Cierre de Caja</h5>
+
+                <div class="col-sm-4 d-flex align-items-center gap-2">
+                    <label class="col-auto">Fecha:</label>
+                    <input type="text" class="form-control text-end" [(ngModel)]="balance.date" [readonly]="true">
+                </div>
+
+                <div class="col-sm-4 d-flex align-items-center gap-2">
+                    <label>Turno:</label>
+                    <input type="text" class="form-control text-end" [(ngModel)]="balance.shift" [readonly]="true">
+                </div>
+
+                <div class="col-sm-8 d-flex align-items-center gap-2">
+                    <label>Personal:</label>
+                    <input type="text" class="form-control text-end" [(ngModel)]="balance.employeeName"
+                        [readonly]="true">
+                </div>
+
+                <div class="col-sm-4 d-flex align-items-center gap-2 w-50">
+                    <label class="col-auto">Caja inicial:</label>
+                    <input type="number" class="form-control text-end" [(ngModel)]="balance.openingCashBalance"
+                        [readonly]="true">
+                </div>
+
+                <div class="col-sm-6 d-flex align-items-center gap-2 w-50">
+                    <label class="col-auto">Efect. Inicial:</label>
+                    <input type="number" class="form-control text-end" [(ngModel)]="balance.openingCashOnHand"
+                        [readonly]="true">
+                </div>
+
+                <div class="row mt-3">
+
+                    <div class="col-md-6   entradas-salidas-container p-3 mb-1">
+                        <h5 class="text-center">Entradas</h5>
+
+                        <div class="d-flex align-items-center gap-4 mb-2">
+                            <label class="col-auto">Ventas Efectivo:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.cashSales"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-5 mb-2">
+                            <label class="col-auto">Ventas QR:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.qrSales"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-4 mb-2">
+                            <label class="col-auto">Ventas Tarjeta:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.cardSales"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="col-auto">V. Transferencia:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.transferSales"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-5 mb-2">
+                            <label class="col-auto">Total Entradas:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.totalSales"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="col-auto">Total V. Sistemas:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.systemTotalSales"
+                                [readonly]="true">
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6    entradas-salidas-container p-3 mb-1">
+                        <h5 class="text-center">Salidas</h5>
+
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <label class="col-auto">Gasto Efectivo:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.cashPayments"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="col-auto">Otros gastos:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.otherPayments"
+                                [readonly]="true">
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="col-auto">Total Salidas:</label>
+                            <input type="text" class="form-control text-end" [(ngModel)]="balance.totalPayments"
+                                [readonly]="true">
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+                <!-- Control y Saldo Final -->
+                <div class="row mt-2">
+                    <div class="col-md-6 d-flex align-items-center gap-5">
+                        <label class="col-auto">Control:</label>
+                        <input type="text" class="form-control text-end" [ngClass]="{
+                                                                             'text-danger': balance.control < 0,
+                                                                             'text-success': balance.control > 0
+                                                                           }" [(ngModel)]="balance.control"
+                            [readonly]="true">
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center gap-5">
+                        <label class="col-auto">Saldo Caja Final:</label>
+                        <input type="text" class="form-control text-end" [ngClass]="{
+                                                                             'text-danger': balance.endingCashBalance < 0,
+                                                                             'text-success': balance.endingCashBalance > 0
+                                                                           }" [(ngModel)]="balance.endingCashBalance"
+                            [readonly]="true">
+                    </div>
+                </div>
+
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Observaciones" id="floatingTextarea"
+                        [(ngModel)]="balance.observations" [readonly]="true"></textarea>
+                    <label for="floatingTextarea">Observaciones:</label>
+                </div>
+
+                <div class="col-sm-12 d-flex justify-content-center align-items-center mt-3">
+                    <button type="submit" class="btn btn-warning" (click)="closebalanceModal()">Volver</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

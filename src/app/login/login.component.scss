@@ -1,0 +1,5 @@
+.my-element {
+    background-color: var(--primary-color) !important;
+    width: 100vw; // Mantener el ancho completo de la ventana
+    min-height: 100vh; // Corregir la altura para que sea el 100% de la pantalla
+}

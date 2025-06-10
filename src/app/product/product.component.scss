@@ -1,0 +1,138 @@
+.my-element {
+    background-color: var(--primary-color) !important;
+    width: 100vw; // Mantener el ancho completo de la ventana
+    min-height: 100vh; // Corregir la altura para que sea el 100% de la pantalla
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.entradas-salidas-container {
+    border: 1px solid rgb(168, 159, 159); // borde fino
+    border-radius: 8px; // esquinas redondeadas
+    background-color: #f9f9f9; // opcional: un fondo suave }
+
+}
+
+.stock-expire-container {
+    border: 1px solid rgb(168, 159, 159); // borde fino
+    border-radius: 8px; // esquinas redondeadas
+    background-color: #f9f9f9; // opcional: un fondo suave }
+
+
+}
+
+.custom-card {
+    width: 80%;
+    height: 50vh;
+    max-width: 600px;
+    background: rgb(247, 247, 247);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    display: flex;
+    justify-content: center;
+}
+
+.balance-card {
+    width: 50%;
+    height: 96vh;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    display: flex;
+    justify-content: center;
+}
+
+// Opcional: Ajustar el formulario con margen a la derecha
+.col-md-4 {
+    margin-bottom: auto;
+}
+
+.card {
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    padding: 15px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #999 !important;
+    /*Color mas oscuro*/
+}
+
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    margin-top: 0px;
+    width: 100%;
+    table-layout: fixed;
+    /* Mantiene el ancho de las columnas según lo definido */
+    white-space: nowrap;
+    /* Evita que el texto se divida en múltiples líneas */
+}
+
+.table th,
+.table td {
+    padding: 4px;
+    /*Reduce el espaciado dentro de las celdas*/
+    white-space: nowrap;
+    /*Evita que el contenido se divida en varias lineas*/
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
+
+
+/* Codigo */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 60px;
+}
+
+/* Producto */
+th:nth-child(2),
+td:nth-child(2) {
+    width: 60px;
+}
+
+/* Stock */
+th:nth-child(3),
+td:nth-child(3) {
+    width: 60px;
+}
+
+/* Precio */
+th:nth-child(4),
+td:nth-child(4) {
+    width: 60px;
+}
+
+/* Vencimiento */
+th:nth-child(5),
+td:nth-child(5) {
+    width: 60px;
+}
+
+/* Stock por Vencer */
+th:nth-child(6),
+td:nth-child(6) {
+    width: 60px;
+}

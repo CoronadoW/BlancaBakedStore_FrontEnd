@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@use "bootstrap";
+
+:root {
+    --primary-color: #E0BC29;
+}
+
+body {
+    background-color: var(--primary-color);
+    color: #333;
+    /* Ajusta el color del texto si es necesario */
+}
+
+
+
+.form-control {
+    border: 1px solid #999 !important;
+}

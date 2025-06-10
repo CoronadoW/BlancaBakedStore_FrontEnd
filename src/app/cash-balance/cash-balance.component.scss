@@ -1,0 +1,178 @@
+.my-element {
+    background-color: var(--primary-color) !important;
+    width: 100vw; // Mantener el ancho completo de la ventana
+    min-height: 100vh; // Corregir la altura para que sea el 100% de la pantalla
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.entradas-salidas-container {
+    border: 1px solid #ccc; // borde fino
+    border-radius: 8px; // esquinas redondeadas
+    background-color: #f9f9f9; // opcional: un fondo suave }
+
+}
+
+.balance-card {
+    width: 50%;
+    height: 97vh;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    display: flex;
+    justify-content: center;
+}
+
+
+.card {
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    padding: 15px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #999 !important;
+    /*Color mas oscuro*/
+}
+
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    font-size: 0.8rem;
+    /*reduce el tamaño del texto*/
+    width: 100%;
+    table-layout: fixed;
+    /* Mantiene el ancho de las columnas según lo definido */
+    white-space: nowrap;
+    /* Evita que el texto se divida en múltiples líneas */
+}
+
+.table th,
+.table td {
+    padding: 4px;
+    /*Reduce el espaciado dentro de las celdas*/
+    white-space: nowrap;
+    /*Evita que el contenido se divida en varias lineas*/
+}
+
+
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
+
+/* Fecha */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 80px;
+}
+
+/* Turno */
+th:nth-child(2),
+td:nth-child(2) {
+    width: 60px;
+}
+
+/* Personal */
+th:nth-child(3),
+td:nth-child(3) {
+    width: 100px;
+}
+
+/* Saldo caja inicial (Caja Inicial)*/
+th:nth-child(4),
+td:nth-child(4) {
+    width: 80px;
+}
+
+/* Saldo efectivo inicial (Efect. Inicial)*/
+th:nth-child(5),
+td:nth-child(5) {
+    width: 80px;
+}
+
+/*Ventas efectivo (V. Efectivo)*/
+th:nth-child(6),
+td:nth-child(6) {
+    width: 80px;
+}
+
+/*Ventas Tarjetas (V. Tarjeta)*/
+th:nth-child(7),
+td:nth-child(7) {
+    width: 80px;
+}
+
+/*Ventas Transferencias (V. Transf)*/
+th:nth-child(8),
+td:nth-child(8) {
+    width: 80px;
+}
+
+/*Ventas QR (V. QR)*/
+th:nth-child(9),
+td:nth-child(9) {
+    width: 80px;
+}
+
+/*Total Entradas (T. Entradas)*/
+th:nth-child(10),
+td:nth-child(10) {
+    width: 80px;
+}
+
+/*Total Ventas Sistema (T.V.Sistema)*/
+th:nth-child(11),
+td:nth-child(11) {
+    width: 80px;
+}
+
+/*Control*/
+th:nth-child(12),
+td:nth-child(12) {
+    width: 80px;
+}
+
+/*Saldo Caja Final(Caja Final)*/
+th:nth-child(13),
+td:nth-child(13) {
+    width: 80px;
+}
+
+/*Gastos Efectivo (Gasto efect.)*/
+th:nth-child(14),
+td:nth-child(14) {
+    width: 80px;
+}
+
+/*Otros Gastos no Efectivo (G. no Efect.)*/
+th:nth-child(15),
+td:nth-child(15) {
+    width: 80px;
+}
+
+/*Total Salidas (T. Salidas)*/
+th:nth-child(16),
+td:nth-child(16) {
+    width: 80px;
+}
+
+/* Agrega más reglas según sea necesario */

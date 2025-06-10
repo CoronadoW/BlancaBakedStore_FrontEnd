@@ -1,0 +1,314 @@
+<div class="my-element">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Columna de la tabla (75%) -->
+            <div class="col-md-8 d-flex align-items-start">
+
+                <div class=" card flex-grow-1 p-3">
+                    <h3 class="text-center">Proveedores</h3>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Marca</th>
+                                        <th scope="col">Telefono</th>
+                                        <th scope="col">Dirección</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Editar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let preSeller of preSellers"
+                                        (click)="openPurchaseModal(preSeller.preSellerName)">
+                                        <th scope="row">{{ preSeller.preSellerName }}</th>
+                                        <td>{{ preSeller.preSellerBrand }}</td>
+                                        <td>{{ preSeller.preSellerPhone }}</td>
+                                        <td>{{ preSeller.address }}</td>
+                                        <td>{{ preSeller.email }}</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm">Editar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Controles de paginación -->
+
+                            <nav aria-label="Page navigation" class="mt-3">
+                                <ul class="pagination justify-content-center">
+
+                                    <!-- Botón anterior -->
+                                    <li class="page-item" [class.disabled]="currentPage === 0">
+                                        <button class="page-link" (click)="onPageChange(currentPage - 1)"
+                                            [disabled]="currentPage === 0">Anterior</button>
+                                    </li>
+
+                                    <!-- Botones de páginas -->
+                                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                                        [class.active]="i === currentPage">
+                                        <button class="page-link" (click)="onPageChange(i)">{{ i + 1 }}</button>
+                                    </li>
+
+                                    <!-- Botón siguiente -->
+                                    <li class="page-item" [class.disabled]="currentPage + 1 >= totalPages">
+                                        <button class="page-link" (click)="onPageChange(currentPage + 1)"
+                                            [disabled]="currentPage + 1 >= totalPages">Siguiente</button>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column of form (25%) -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+
+                <!-- Card to search PreSeller-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Buscar Proveedor</h5>
+
+                    <form (ngSubmit)="openPurchaseModal(preSellerName)" class="row g-3 w-100">
+
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control text-center" placeholder="Proveedor"
+                                [(ngModel)]="preSellerName" name="preSellerName" aria-label="Proveedor" required>
+                        </div>
+
+                        <div class="col-6 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning"
+                                (click)="clearPreSellerName()">Limpiar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Card to save PreSeller -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Cargar Proveedor</h5>
+                    <form (ngSubmit)="createPreSeller()" class="row g-3">
+
+
+                        <div class="col-sm-12">
+                            <label for="preSellerName">Nombre</label>
+                            <input type="text" id="codigoInput" class="form-control text-center" aria-label="Nombre"
+                                [(ngModel)]="preSellerDto.preSellerName" name="preSellerName">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="preSellerBrand">Marca</label>
+                            <input type="text" id="codigoInput" class="form-control text-center" aria-label="Marca"
+                                [(ngModel)]="preSellerDto.preSellerBrand" name="preSellerBrand">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="preSellerPhone">Telefono</label>
+                            <input type="text" id="codigoInput" class="form-control text-center" aria-label="Telefono"
+                                [(ngModel)]="preSellerDto.preSellerPhone" name="preSellerPhone">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="address">Dirección</label>
+                            <input type="text" id="codigoInput" class="form-control text-center" aria-label="Dirección"
+                                [(ngModel)]="preSellerDto.address" name="address">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="email">email</label>
+                            <input type="text" id="codigoInput" class="form-control text-center" aria-label="email"
+                                [(ngModel)]="preSellerDto.email" name="email">
+                        </div>
+
+
+                        <div class="col-sm-6 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Cargar</button>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning"
+                                (click)="clearFormPreSeller()">Limpiar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Card to charge Product and PreSeller -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Cargar compras a proveedores</h5>
+                    <form (ngSubmit)="createPurchase()">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="purchaseDate">Fecha de compra</label>
+                                <input type="date" required class="form-control" [(ngModel)]="purchaseDto.purchaseDate"
+                                    name="purchaseDate">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="preSellerName">Nombre Proveedor</label>
+                                <input type="text" required class="form-control" [(ngModel)]="purchaseDto.preSellerName"
+                                    name="preSellerName">
+                            </div>
+
+                            <!-- Dynamic supplies -->
+                            <div class="col-sm-12">
+                                <h6>Insumos</h6>
+                                <div *ngFor="let purProd of purchaseDto.purProdDtoList; let i = index"
+                                    class="row g-2 mb-2">
+                                    <div class="col-6">
+                                        <label for="name">Producto comprado</label>
+                                        <input type="text" class="form-control" [(ngModel)]="purProd.name"
+                                            name="name{{i}}">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="brand">Marca</label>
+                                        <input type="text" class="form-control" [(ngModel)]="purProd.brand"
+                                            name="brand{{i}}">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="unitCost">Costo unitario</label>
+                                        <input type="number" class="form-control" [(ngModel)]="purProd.unitCost"
+                                            name="unitCost{{i}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="qty">Cantidad</label>
+                                        <input type="number" class="form-control" [(ngModel)]="purProd.qty"
+                                            name="qty{{i}}">
+                                    </div>
+                                    <div class="col-2 d-flex align-items-center">
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            (click)="removeProduct(i)">Eliminar</button>
+
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                    (click)="addProduct()">Agregar
+                                    Producto</button>
+                            </div>
+
+                            <div class="col-sm-6 d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-warning">Crear
+                                    Compra</button>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-center mt-3">
+                                <button type="button" class="btn btn-warning"
+                                    (click)="clearFormPurchase()">Limpiar</button>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+
+                <!--Modal to show Recipe Cost-->
+                <div class="modal fade show d-block bg-dark bg-opacity-50" *ngIf="showModal">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content rounded-4 shadow">
+
+                            <div class="modal-header bg-warning text-white rounded-top-4">
+                                <h5 class="modal-title">Compras realizadas a: {{ selectedPreSellerName }}</h5>
+                                <button type="button" class="btn-close" (click)="closeModal()"></button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <!--
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Margen de Marcación:</strong> {{ createdRecipe?.markingMargin }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Unidades por Receta:</strong> {{ createdRecipe?.unitsPerRecipe }}
+                                    </div>
+                                </div>
+                                -->
+
+                                <h6 class="mt-3">Detalle de Insumos comprados</h6>
+                                <table class="table table-sm table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Producto</th>
+                                            <th>Marca</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo Unitario</th>
+                                            <th>Costo Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let purchase of purchaseList">
+                                            <tr *ngFor="let product of purchase.purProdList">
+                                                <td>{{ purchase.purchaseDate }}</td>
+                                                <td>{{ product.purProdName}}</td>
+                                                <td>{{ product.purProdBrand }}</td>
+                                                <td>{{ product.purProdQty }}</td>
+                                                <td>{{ product.purProdUnitCost | currency }}</td>
+                                                <td>{{ product.totalCost | currency }}</td>
+
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+
+                                <!--
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <h6>Costos Variables</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Ingredientes: {{ createdRecipe?.ingreVarCost |
+                                                currency
+                                                }} ({{
+                                                createdRecipe?.ingrePercent }}%)</li>
+                                            <li class="list-group-item">Empaque: {{ createdRecipe?.packVarCost |
+                                                currency }}
+                                                ({{
+                                                createdRecipe?.packagingPercent }}%)</li>
+                                            <li class="list-group-item">Mano de Obra: {{ createdRecipe?.laborVarCost |
+                                                currency
+                                                }} ({{
+                                                createdRecipe?.variableLaborPercent }}%)</li>
+                                            <li class="list-group-item">Costo Variable Total: {{
+                                                createdRecipe?.variableCost
+                                                |
+                                                currency
+                                                }} ({{ createdRecipe?.variableCostPercent }}%)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Resumen</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Precio Efectivo: {{
+                                                createdRecipe?.effectivePrice |
+                                                currency }}
+                                            </li>
+                                            <li class="list-group-item">Contribución Marginal: {{
+                                                createdRecipe?.marginalContribution |
+                                                currency }} ({{ createdRecipe?.marginalContribPercent }}%)</li>
+                                            <li class="list-group-item">Distribución de Costos Fijos: {{
+                                                createdRecipe?.fixCostDistribution | currency }} ({{
+                                                createdRecipe?.fixCostDistribPercent }}%)</li>
+                                            <li class="list-group-item">Ganancia: {{ createdRecipe?.profit | currency }}
+                                                ({{
+                                                createdRecipe?.profitPercent }}%)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                -->
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

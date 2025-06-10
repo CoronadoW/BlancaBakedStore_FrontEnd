@@ -1,0 +1,148 @@
+.my-element {
+    background-color: var(--primary-color) !important;
+    width: 100vw; // Mantener el ancho completo de la ventana
+    min-height: 100vh; // Corregir la altura para que sea el 100% de la pantalla
+}
+
+.modal-content {
+    font-size: 0.95rem;
+}
+
+.modal-header {
+    font-weight: bold;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.balance-card {
+    width: 50%;
+    height: 82vh;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    margin-top: 10px;
+    padding: 15px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #999 !important;
+    /*Color mas oscuro*/
+}
+
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    font-size: 0.8rem;
+    width: 100%;
+    table-layout: fixed;
+    /* Mantiene el ancho de las columnas según lo definido */
+    white-space: nowrap;
+    /* Evita que el texto se divida en múltiples líneas */
+}
+
+.table th,
+.table td {
+    padding: 4px;
+    white-space: nowrap;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 8px;
+}
+
+/* Receta */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 100px;
+}
+
+/* M.Marcación */
+th:nth-child(2),
+td:nth-child(2) {
+    width: 100px;
+}
+
+/* Unidades */
+th:nth-child(3),
+td:nth-child(3) {
+    width: 100px;
+}
+
+/* Costo Variable */
+th:nth-child(4),
+td:nth-child(4) {
+    width: 100px;
+}
+
+/* Costo Unitario */
+th:nth-child(5),
+td:nth-child(5) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(6),
+td:nth-child(6) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(7),
+td:nth-child(7) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(8),
+td:nth-child(8) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(9),
+td:nth-child(9) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(10),
+td:nth-child(10) {
+    width: 100px;
+}
+
+/* Ganancia */
+th:nth-child(11),
+td:nth-child(11) {
+    width: 100px;
+}

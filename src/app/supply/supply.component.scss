@@ -1,0 +1,96 @@
+.my-element {
+    background-color: var(--primary-color) !important;
+    width: 100vw; // Mantener el ancho completo de la ventana
+    min-height: 100vh; // Corregir la altura para que sea el 100% de la pantalla
+}
+
+.card {
+    margin-top: 10px; // Asegura que todas las tarjetas tengan la misma separación del navbar
+    padding: 15px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #999 !important;
+    /*Color mas oscuro*/
+}
+
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    font-size: 0.8rem;
+    width: 100%;
+    table-layout: fixed;
+    /* Mantiene el ancho de las columnas según lo definido */
+    white-space: nowrap;
+    /* Evita que el texto se divida en múltiples líneas */
+}
+
+.table th,
+.table td {
+    padding: 4px;
+    white-space: nowrap;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 8px;
+}
+
+/* Codigo */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 50px;
+}
+
+/* Tipo */
+th:nth-child(2),
+td:nth-child(2) {
+    width: 70px;
+}
+
+/* Insumo */
+th:nth-child(3),
+td:nth-child(3) {
+    width: 80px;
+}
+
+/* Cantidad por Unidad */
+th:nth-child(4),
+td:nth-child(4) {
+    width: 80px;
+}
+
+/* Unidad de medida */
+th:nth-child(5),
+td:nth-child(5) {
+    width: 50px;
+}
+
+/* Costo */
+th:nth-child(6),
+td:nth-child(6) {
+    width: 50px;
+}
+
+/* Fecha Compra */
+th:nth-child(7),
+td:nth-child(7) {
+    width: 60px;
+}
+
+/* Fecha Vencimiento */
+th:nth-child(8),
+td:nth-child(8) {
+    width: 60px;
+}
+
+/* Fecha Vencimiento */
+th:nth-child(9),
+td:nth-child(9) {
+    width: 60px;
+}

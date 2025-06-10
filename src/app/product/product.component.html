@@ -1,0 +1,431 @@
+<div class="my-element">
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Table column to show Products List (75%) -->
+            <div class="col-md-8 d-flex align-items-start">
+
+                <div class="card flex-grow-1 p-3">
+                    <h3 class="text-center">Productos por Código</h3>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">Código</th>
+                                    <th class="text-center" scope="col">Producto</th>
+                                    <th class="text-center" scope="col">Precio</th>
+                                    <th class="text-center" scope="col">Stock Total</th>
+                                    <th class="text-center" scope="col">Proximo Vencimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of resProdNearExpList" (click)="openProductModal(product)">
+
+                                    <th class="text-center" scope="row">{{ product.productCode}}</th>
+                                    <td>{{ product.productName }}</td>
+                                    <th class="text-center" scope="row">{{ product.salePrice }}</th>
+                                    <td class="text-center">{{ product.stock }}</td>
+                                    <td class="text-center" [ngClass]="getExpireDateClass(product.
+                                nearestExpireDate)">{{ product.nearestExpireDate }}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Columna del formulario (25%) -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+
+                <!-- Card "Buscar Producto" by productName-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Buscar Producto</h5>
+
+                    <form (ngSubmit)="searchProduct()" class="row g-3">
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control text-center" placeholder="Código de Producto"
+                                aria-label="Código" [(ngModel)]="resProdNearExp.productCode" name="productCode">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control text-center" placeholder="Producto"
+                                aria-label="Producto" [(ngModel)]="resProdNearExp.productName" name="productName">
+                        </div>
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Card to consump stock from products-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Consumo de Stock</h5>
+
+                    <form (ngSubmit)="updateStock()" class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="productCode">Codigo</label>
+                            <input type="number" class="form-control text-center" aria-label="Codigo"
+                                [(ngModel)]="expDto1.productCode" name="productCode">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="stock">Stock Consumido</label>
+                            <input type="number" class="form-control text-center" aria-label="Nuevo Stock"
+                                [(ngModel)]="expDto1.qty" name="stock">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Card to enter new Product Stock. Charge new entry of Expiration Entity in Spring db-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Ingreso Productos</h5>
+
+                    <form (ngSubmit)="updateProduct()" class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="productCode">Codigo</label>
+                            <input type="number" class="form-control text-center" aria-label="Codigo"
+                                [(ngModel)]="expDto.productCode" name="productCode">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="qty">Stock entrante</label>
+                            <input type="number" class="form-control text-center" aria-label="Nuevo Stock"
+                                [(ngModel)]="expDto.qty" name="qty">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="buyDate">Fecha de Compra</label>
+                            <input type="date" class="form-control text-center" aria-label="Fecha de vencimiento"
+                                [(ngModel)]="expDto.buyDate" name="buyDate">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="expireDate">Fecha de Vencimiento</label>
+                            <input type="date" class="form-control text-center" aria-label="Fecha de vencimiento"
+                                [(ngModel)]="expDto.expireDate" name="expireDate">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Modal to show searched Product--> <!--ShowProductModal === boolean-->
+                <div class="modal fade show  overlay" *ngIf="showProductModal" tabindex="-1">
+                    <div class="card custom-card">
+
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Producto</h5>
+
+                            <div class="row g-3">
+
+                                <div class="col-sm-6 d-flex align-items-center gap-2">
+                                    <label for="productCode" class="col-auto">Código:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="resProdNearExp.productCode"
+                                        name="productCode">
+                                </div>
+                                <div class="col-sm-6 d-flex align-items-center gap-2">
+                                    <label for="product">Producto:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="resProdNearExp.productName"
+                                        name="product">
+                                </div>
+
+                                <div class="col-sm-7 d-flex align-items-center gap-4">
+                                    <label for="price" class="col-auto">Precio:</label>
+                                    <input type="text" class="form-control text-end flex-grow-1"
+                                        [(ngModel)]="resProdNearExp.salePrice" name="price">
+                                </div>
+
+                                <div class="row mt-3 p-1">
+
+                                    <div class="entradas-salidas-container p-3 col-sm-6">
+                                        <div class="col-sm-12 d-flex align-items-center gap-4">
+                                            <label for="qty" class="col-auto">Stock por vencer:</label>
+                                            <input type="text" class="form-control text-end flex-grow-1"
+                                                [(ngModel)]="resProdNearExp.qty" name="qty">
+                                        </div>
+
+                                        <div class="col-sm-12 d-flex align-items-center gap-2">
+                                            <label for="expireDate" class="col-auto"> Prox. venc.:</label>
+                                            <input type="text" class="form-control text-end flex-grow-1"
+                                                [(ngModel)]="resProdNearExp.nearestExpireDate" name="expireDate">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="stock-expire-container p-3 col-sm-6">
+                                        <div class="col-sm-12 d-flex align-items-center gap-4">
+                                            <label for="qty" class="col-auto">Stock Vencido:</label>
+                                            <input type="text" class="form-control text-end flex-grow-1"
+                                                [(ngModel)]="resProdNearExp.qty" name="qty">
+                                        </div>
+
+                                        <div class="col-sm-12 d-flex align-items-center gap-2">
+                                            <label for="expireDate" class="col-auto"> Fecha vencida:</label>
+                                            <input type="text" class="form-control text-end flex-grow-1"
+                                                [(ngModel)]="resProdNearExp.nearestExpireDate" name="expireDate">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 d-flex justify-content-center">
+                                <button type="submit" class="btn btn-warning mt-3"
+                                    (click)="closeProductModal()">Cerrar</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!---------------------------Cash Balance---------------------------------------->
+
+
+                <!-- Card for get data to create Cash Balance -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Cierre de caja</h5>
+
+                    <form (ngSubmit)="verifyUserThenCreateBalance()" class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="fechaCierre">Fecha de Cierre</label>
+                            <input type="date" class="form-control text-center" [(ngModel)]="cashBalanceDto.date"
+                                aria-label="Fecha" name="date">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="shift">Turno</label>
+                            <select class="form-select" [(ngModel)]="cashBalanceDto.shift" name="shift">
+                                <option value="" disabled selected>Seleccione un turno</option>
+                                <option value="Mañana">Mañana</option>
+                                <option value="Tarde">Tarde</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="employeeName">Usuario</label>
+                            <input type="text" class="form-control" aria-label="Usuario"
+                                [(ngModel)]="cashBalanceDto.employeeName" name="employeeName" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="openingCashBalance">Saldo caja inicial</label>
+                            <input type="number" class="form-control" aria-label="Saldo caja inicial"
+                                [(ngModel)]="cashBalanceDto.openingCashBalance" name="openingCashBalance" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="openingCashOnHand">Saldo efectivo inicial</label>
+                            <input type="number" class="form-control" aria-label="Saldo efectivo inicial"
+                                [(ngModel)]="cashBalanceDto.openingCashOnHand" name="openingCashOnHand" required>
+                        </div>
+                        <h6 class="text-center">Entradas</h6>
+                        <div class="col-sm-6">
+                            <label for="cashSales">Ventas en efectivo</label>
+                            <input type="number" class="form-control" aria-label="Ventas en efectivo"
+                                [(ngModel)]="cashBalanceDto.cashSales" name="cashSales" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="cardSales">Ventas con tarjeta</label>
+                            <input type="number" class="form-control" aria-label="Ventas con tarejeta"
+                                [(ngModel)]="cashBalanceDto.cardSales" name="cardSales" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="transferSales">Ventas con transferencia</label>
+                            <input type="number" class="form-control" aria-label="Ventas con Transferencia"
+                                [(ngModel)]="cashBalanceDto.transferSales" name="transferSales" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="qrSales">Ventas con QR</label>
+                            <input type="number" class="form-control" aria-label="Ventas con QR"
+                                [(ngModel)]="cashBalanceDto.qrSales" name="qrSales" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="systemTotalSales">Total ventas sistema</label>
+                            <input type="number" class="form-control" aria-label="Total Ventas Sistema"
+                                [(ngModel)]="cashBalanceDto.systemTotalSales" name="systemTotalSales" required>
+                        </div>
+
+                        <h6 class="text-center">Salidas</h6>
+                        <div class="col-sm-6">
+                            <label for="cashPayments">Gastos en efectivo</label>
+                            <input type="number" class="form-control" aria-label="Gastos en efectivo"
+                                [(ngModel)]="cashBalanceDto.cashPayments" name="cashPayments" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="otherPayments">Otros gastos no efectivo</label>
+                            <input type="number" class="form-control" aria-label="Otros gastos no efect."
+                                [(ngModel)]="cashBalanceDto.otherPayments" name="otherPayments" required>
+                        </div>
+
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"
+                                [(ngModel)]="cashBalanceDto.observations" name="observations"></textarea>
+                            <label for="floatingTextarea">Observaciones</label>
+                        </div>
+
+                        <div class="col-sm-12 d-flex justify-content-center">
+                            <button *ngIf="role === 'ADMIN' || role === 'USUARIO'" type="submit"
+                                class="btn btn-warning">Cerrar
+                                Caja</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal to show created cash balance-->
+                <div class="modal fade show overlay" *ngIf="showBalance" tabindex="-1"> <!---ShowBalance === boolean-->
+                    <div class="card balance-card p-3">
+                        <div class="row g-1">
+
+                            <h5 class="text-center">Cierre de Caja</h5>
+
+                            <div class="col-sm-4 d-flex align-items-center gap-2">
+                                <label class="col-auto">Fecha:</label>
+                                <input type="text" class="form-control text-end" [(ngModel)]="balance.date"
+                                    [readonly]="true">
+                            </div>
+
+                            <div class="col-sm-4 d-flex align-items-center gap-2">
+                                <label>Turno:</label>
+                                <input type="text" class="form-control text-end" [(ngModel)]="balance.shift"
+                                    [readonly]="true">
+                            </div>
+
+                            <div class="col-sm-8 d-flex align-items-center gap-2">
+                                <label>Personal:</label>
+                                <input type="text" class="form-control text-end" [(ngModel)]="balance.employeeName"
+                                    [readonly]="true">
+                            </div>
+
+                            <div class="col-sm-4 d-flex align-items-center gap-2 w-50">
+                                <label class="col-auto">Caja inicial:</label>
+                                <input type="number" class="form-control text-end"
+                                    [(ngModel)]="balance.openingCashBalance" [readonly]="true">
+                            </div>
+
+                            <div class="col-sm-6 d-flex align-items-center gap-2 w-50">
+                                <label class="col-auto">Efect. Inicial:</label>
+                                <input type="number" class="form-control text-end"
+                                    [(ngModel)]="balance.openingCashOnHand" [readonly]="true">
+                            </div>
+
+
+                            <div class="row mt-3">
+
+                                <div class="col-md-6   entradas-salidas-container p-3 mb-1">
+                                    <h5 class="text-center">Entradas</h5>
+
+                                    <div class="d-flex align-items-center gap-4 mb-2">
+                                        <label class="col-auto">Ventas Efectivo:</label>
+                                        <input type="text" class="form-control text-end" [(ngModel)]="balance.cashSales"
+                                            [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-5 mb-2">
+                                        <label class="col-auto">Ventas QR:</label>
+                                        <input type="text" class="form-control text-end" [(ngModel)]="balance.qrSales"
+                                            [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-4 mb-2">
+                                        <label class="col-auto">Ventas Tarjeta:</label>
+                                        <input type="text" class="form-control text-end" [(ngModel)]="balance.cardSales"
+                                            [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <label class="col-auto">V. Transferencia:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.transferSales" [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-5 mb-2">
+                                        <label class="col-auto">Total Entradas:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.totalSales" [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <label class="col-auto">Total V. Sistemas:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.systemTotalSales" [readonly]="true">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6    entradas-salidas-container p-3 mb-1">
+                                    <h5 class="text-center">Salidas</h5>
+
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <label class="col-auto">Gasto Efectivo:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.cashPayments" [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <label class="col-auto">Otros gastos:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.otherPayments" [readonly]="true">
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <label class="col-auto">Total Salidas:</label>
+                                        <input type="text" class="form-control text-end"
+                                            [(ngModel)]="balance.totalPayments" [readonly]="true">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <!-- Control y Saldo Final -->
+                            <div class="row mt-2">
+                                <div class="col-md-6 d-flex align-items-center gap-5">
+                                    <label class="col-auto">Control:</label>
+                                    <input type="text" class="form-control text-end" [ngClass]="{
+                                                                         'text-danger': balance.control < 0,
+                                                                         'text-success': balance.control > 0
+                                                                       }" [(ngModel)]="balance.control"
+                                        [readonly]="true">
+                                </div>
+
+                                <div class="col-md-6 d-flex align-items-center gap-5">
+                                    <label class="col-auto">Saldo Caja Final:</label>
+                                    <input type="text" class="form-control text-end" [ngClass]="{
+                                                                         'text-danger': balance.endingCashBalance < 0,
+                                                                         'text-success': balance.endingCashBalance > 0
+                                                                       }" [(ngModel)]="balance.endingCashBalance"
+                                        [readonly]="true">
+                                </div>
+                            </div>
+
+
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Observaciones" id="floatingTextarea"
+                                    [(ngModel)]="balance.observations" [readonly]="true"></textarea>
+                                <label for="floatingTextarea">Observaciones:</label>
+                            </div>
+
+                            <div class="col-sm-6 d-flex justify-content-center align-items-center mt-3">
+                                <button type="submit" class="btn btn-warning"
+                                    (click)="closeBalanceModal()">Volver</button>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-center align-items-center mt-3">
+                                <button type="submit" class="btn btn-warning">Editar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

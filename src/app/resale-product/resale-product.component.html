@@ -1,0 +1,315 @@
+<div class="my-element">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Columna de la tabla (75%) -->
+            <div class="col-md-8 d-flex align-items-start">
+
+                <div class=" card flex-grow-1 p-3">
+                    <h3 class="text-center">Productos de reventa, costos y margenes</h3>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Código</th>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Unidad</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">Prox.Vto</th>
+                                        <th scope="col">Adquisición</th>
+                                        <th scope="col">Packaging</th>
+                                        <th scope="col">Envio</th>
+                                        <th scope="col">Costo Total</th>
+                                        <th scope="col">M.Marcación</th>
+                                        <th scope="col">P.Venta</th>
+                                        <th scope="col">Cont.Marginal</th>
+                                        <th scope="col">M. Contrib.</th>
+                                        <th scope="col">Comisión</th>
+                                        <th scope="col">P.V.Comisión</th>
+                                        <th scope="col">C.M.Comisión</th>
+                                        <th scope="col">M.C.Comisión</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let product of resProsNearDatesList" (click)="openModal(product)">
+                                        <th scope="row">{{ product.productCode}}</th>
+                                        <td>{{ product.productName }}</td>
+                                        <td>{{ product.unitType }}</td>
+                                        <td>{{ product.stock }}</td>
+
+                                        <td [ngClass]="getExpireDateClass(product.
+                                nearestExpireDate)">
+                                            {{ product.nearestExpireDate}}
+                                        </td>
+
+                                        <td>{{ product.costPrice }}</td>
+                                        <td>{{ product.packagingPrice }}</td>
+                                        <td>{{ product.deliveryPrice }}</td>
+                                        <th scope="row">{{ product.totalCost}}</th>
+                                        <td>{{ product.markingMargin }}</td>
+                                        <th scope="row">{{ product.salePrice }}</th>
+                                        <td>{{ product.marginalContribution}}</td>
+                                        <td>{{ product.contributionMargin}}</td>
+                                        <td>{{ product.commission }}</td>
+                                        <td>{{ product.salePriceWithCommission }}</td>
+                                        <td>{{ product.marginalContribWithCommission }}</td>
+                                        <td>{{ product.contribMarginWithCommission}}</td>
+                                        <td>
+                                            <button
+                                                (click)="product.productCode != null && deleteProduct(product.productCode); $event.stopPropagation()"
+                                                class="btn btn-warning btn-sm">Eliminar producto</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column of form (25%) -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+
+                <!-- Card buscar Producto -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Buscar Producto</h5>
+
+                    <form (ngSubmit)="searchProduct()" class="row g-3">
+                        <div class="col-sm-12">
+                            <input type="number" id="codigoInput" class="form-control text-center"
+                                placeholder="Codigo de Producto" aria-label="Codigo"
+                                [(ngModel)]="selectedProduct.productCode" name="productCode">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="text" id="codigoInput" class="form-control text-center" placeholder="Producto"
+                                aria-label="Producto" [(ngModel)]="selectedProduct.productName" name="productName">
+                        </div>
+
+
+                        <div class="col-sm-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Card to create ResaleProduct -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-2">
+                    <h5 class="text-center">Cargar producto, costos y margenes</h5>
+
+                    <form (ngSubmit)="createResaleProduct()" class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="productCode">Codigo</label>
+                            <input type="number" [(ngModel)]="resaleProdDto.productCode" name="productCode"
+                                class="form-control" aria-label="Código">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="productName">Producto</label>
+                            <input type="text" required class="form-control" aria-label="Producto"
+                                [(ngModel)]="resaleProdDto.productName" name="productName">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="unitType">Tipo de Unidad</label>
+                            <select class="form-select" [(ngModel)]="resaleProdDto.unitType" name="unitType">
+                                <option value="Unidad">Unidad</option>
+                                <option value="Kilo">Kilo</option>
+                                <option value="Litro">Litro</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="stock">Stock</label>
+                            <input type="number" required class="form-control" aria-label="Stock"
+                                [(ngModel)]="resaleProdDto.stock" name="stock">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="buyDate">Fecha de Compra</label>
+                            <input type="date" required class="form-control" aria-label="Fecha de compra"
+                                [(ngModel)]="resaleProdDto.expDto.buyDate" name="buyDate">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="expireDate">Vencimiento</label>
+                            <input type="date" required class="form-control" aria-label="Vencimiento"
+                                [(ngModel)]="resaleProdDto.expDto.expireDate" name="expireDate">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="costPrice">Costo</label>
+                            <input type="number" required class="form-control" aria-label="Costo"
+                                [(ngModel)]="resaleProdDto.costPrice" name="costPrice">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="packagingPrice">Costo packaging</label>
+                            <input type="number" required class="form-control" aria-label="Costo Packaging"
+                                [(ngModel)]="resaleProdDto.packagingPrice" name="packagingPrice">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="deliveryPrice">Costo de envio</label>
+                            <input type="number" required class="form-control" aria-label="Costo de Envio"
+                                [(ngModel)]="resaleProdDto.deliveryPrice" name="deliveryPrice">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="markingMargin">% Margen de Marcacion</label>
+                            <input type="number" required class="form-control" aria-label="% Margen de Marcación"
+                                [(ngModel)]="resaleProdDto.markingMargin" name="markingMargin">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="commission">% Comisión</label>
+                            <input type="number" required class="form-control" aria-label="% Comisión"
+                                [(ngModel)]="resaleProdDto.commission" name="commission">
+                        </div>
+
+                        <div class="col-sm-6 d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-warning">Crear
+                                Producto</button>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-center mt-3">
+                            <button type="button" class="btn btn-warning" (click)="clearForm()">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal for Resale Product -->
+                <div class="modal fade show  overlay" tabindex="-1" *ngIf="showModal">
+                    <div class="card balance-card" *ngIf="resProdWithNearExp">
+                        <!-- Add this ngIf to asure that createdProduct couldn't be null and cause an error-->
+
+                        <div class="row g-2">
+                            <h5 class="text-center">Producto, costos y margenes</h5>
+
+                            <div class="col-sm-4 d-flex align-items-center gap-2 w-50">
+                                <label for="productCode" class="col-auto">Codigo:</label>
+                                <input type="text" class="form-control text-end fw-bold"
+                                    [(ngModel)]="resProdWithNearExp.productCode" readonly>
+                            </div>
+                            <div class="col-sm-4 d-flex align-items-center gap-2 w-50">
+                                <label for="productName">Producto:</label>
+                                <input type="text" class="form-control text-end fw-bold"
+                                    [(ngModel)]="resProdWithNearExp.productName" readonly>
+                            </div>
+                            <div class="col-sm-4 d-flex align-items-center gap-2">
+                                <label for="unitType">Unidad:</label>
+                                <input type="text" class="form-control text-end"
+                                    [(ngModel)]="resProdWithNearExp.unitType" readonly>
+                            </div>
+                            <div class="col-sm-3 d-flex align-items-center gap-2">
+                                <label for="stock" class="col-auto">Stock:</label>
+                                <input type="text" class="form-control text-end" [(ngModel)]="resProdWithNearExp.stock"
+                                    readonly>
+                            </div>
+
+                            <div class="col-sm-5 d-flex align-items-center gap-2">
+                                <label for="nearestExpireDate" class="col-auto">Prox. Vencimiento:</label>
+                                <input type="text" class="form-control text-end" [ngClass]="getExpireDateClass(resProdWithNearExp.
+                                nearestExpireDate)" [(ngModel)]="resProdWithNearExp.nearestExpireDate" readonly>
+                            </div>
+
+                            <div class="col-sm-6 d-flex align-items-center gap-3 mb-2">
+                                <label class="col-auto">Margen de Marcación:</label>
+                                <input type="text" class="form-control text-end"
+                                    [value]="(resProdWithNearExp.markingMargin ?? 0) / 100 | percent" readonly>
+                            </div>
+
+
+                            <div class="col-sm-6 d-flex align-items-center gap-2 mb-2">
+                                <label class="col-auto">Comisión:</label>
+                                <input type="text" class="form-control text-end"
+                                    [value]="(resProdWithNearExp.commission ?? 0) / 100 | percent" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-4   entradas-salidas-container p-3 mb-1">
+                                <h5 class="text-center">Costos</h5>
+
+                                <div class="d-flex align-items-center gap-4 mb-2">
+                                    <label class="col-auto">Precio de Costo:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.costPrice" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-5 mb-2">
+                                    <label class="col-auto">Costo envio:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.deliveryPrice" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-4 mb-2">
+                                    <label class="col-auto">Packaging:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.packagingPrice" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Mano de Obra</label>
+                                    <input type="text" class="form-control text-end" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Costo Total</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.totalCost" [readonly]="true">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4    entradas-salidas-container p-3 mb-1">
+                                <h5 class="text-center">Margenes</h5>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Precio de Venta:</label>
+                                    <input type="text" class="form-control text-end fw-bold"
+                                        [(ngModel)]="resProdWithNearExp.salePrice" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">contribución marginal</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.marginalContribution" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Margen contribución:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [value]="(resProdWithNearExp.contributionMargin ?? 0) / 100 | percent" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4    entradas-salidas-container p-3 mb-1">
+                                <h5 class="text-center">Margenes con Comisión</h5>
+
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <label class="col-auto">Precio Venta c/Comisión:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.salePriceWithCommission" [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Contrib. Marg. Comisión:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [(ngModel)]="resProdWithNearExp.marginalContribWithCommission"
+                                        [readonly]="true">
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label class="col-auto">Marg. Contrib. Comisión:</label>
+                                    <input type="text" class="form-control text-end"
+                                        [value]="(resProdWithNearExp.contribMarginWithCommission ?? 0) / 100 | percent"
+                                        readonly>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                            <button type="button" class="btn btn-warning" (click)="closeModal()">Volver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>

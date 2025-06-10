@@ -1,0 +1,212 @@
+<div class="my-element">
+    <div class="container-fluid ">
+        <div class="row">
+
+            <!-- Columna de la tabla (75%) -->
+            <div class="col-md-8 d-flex align-items-start">
+
+                <div class="card flex-grow-1 p-3">
+                    <h3 class="text-center">Insumos</h3>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Insumo</th>
+                                    <th scope="col">Cant.Por Unid.</th>
+                                    <th scope="col">Unidad</th>
+                                    <th scope="col">Costo</th>
+                                    <th scope="col">F. Compra</th>
+                                    <th scope="col">F. Vto</th>
+                                    <th scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let supply of supplies" (click)="showSupplyDetail(supply)">
+                                    <th scope="row">{{supply.supplyCode}}</th>
+                                    <td>{{supply.supplyType}}</td>
+                                    <td>{{supply.supplyName}}</td>
+                                    <td>{{supply.qtyPerUnit}}</td>
+                                    <td>{{supply.unit}}</td>
+                                    <td class="text-end">{{supply.cost}}</td>
+                                    <td>{{supply.buyDate}}</td>
+                                    <td>{{supply.expireDate}}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm">Elimiar</button>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Columna del formulario (25%) -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+
+                <!-- Card Buscar Insumo-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Buscar Insumo</h5>
+                    <form (ngSubmit)="getSupplyByName()" class="row g-3">
+
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control text-center" placeholder="Insumo"
+                                [(ngModel)]="searchSupplyName" name="searchSupplyName" aria-label="Insumo">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Modal para el boton Buscar Insumo-->
+                <!--
+                <div class="modal fade show  overlay" *ngIf="" tabindex="-1">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Insumo</h5>
+                            <div class="row g-3">
+
+
+                                <div class="col-sm-6 d-flex align-items-center gap-2">
+                                    <label for="productCode" class="col-auto">Código:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-sm-6 d-flex align-items-center gap-2">
+                                    <label for="product">Producto:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-sm-7 d-flex align-items-center gap-4">
+                                    <label for="stock" class="col-auto">Stock:</label>
+                                    <input type="text" class="form-control text-end flex-grow-1">
+                                </div>
+                                <div class="col-sm-7 d-flex align-items-center gap-4">
+                                    <label for="price" class="col-auto">Precio:</label>
+                                    <input type="text" class="form-control text-end flex-grow-1">
+                                </div>
+                                <div class="col-sm-7 d-flex align-items-center gap-2">
+                                    <label for="expireDate" class="col-auto">Vencimiento:</label>
+                                    <input type="text" class="form-control text-end flex-grow-1">
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 d-flex justify-content-center">
+                                <button class="btn btn-warning mt-3 ">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+
+                <!-- Card Crear Insumo -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center mb-3">
+                    <h5 class="text-center">Crear Insumo</h5>
+                    <form (ngSubmit)="createSupply()" class="row g-3">
+
+                        <div class="col-sm-6">
+                            <label for="supplyCode">Código</label>
+                            <input type="number" class="form-control" aria-label="Codigo"
+                                [(ngModel)]="newSupply.supplyCode" name="supplyCode">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="supplyType">Tipo de Insumo</label>
+                            <select class="form-select" [(ngModel)]="newSupply.supplyType" name="supplyType">
+                                <!-- <option value="" disabled selected>Tipo de insumo</option>-->
+                                <option value="Ingrediente">Ingrediente</option>
+                                <option value="Packaging">Packaging</option>
+                                <option value="Sub Receta">Sub Receta</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="supplyName">Insumo</label>
+                            <input type="text" class="form-control" aria-label="Insumo"
+                                [(ngModel)]="newSupply.supplyName" name="supplyName">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="qtyPerUnit">Cantidad por Unidad</label>
+                            <input type="number" class="form-control" aria-label="Cant. Por Unid."
+                                [(ngModel)]="newSupply.qtyPerUnit" name="qtyPerUnit">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="unit">Tipo unidad</label>
+                            <select class="form-select" [(ngModel)]="newSupply.unit" name="unit">
+                                <!--<option value="" disabled selected>Tipo de unidad</option>-->
+                                <option value="Unidad">Unidad</option>
+                                <option value="Kilo">Kilo</option>
+                                <option value="Litro">Litro</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="cost">Costo</label>
+                            <input type="number" class="form-control" aria-label="Costo" [(ngModel)]="newSupply.cost"
+                                name="cost">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="buyDate">Fecha de Compra</label>
+                            <input type="date" class="form-control" aria-label="Fecha Compra"
+                                [(ngModel)]="newSupply.buyDate" name="buyDate" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="expireDate">Fecha de Vencimiento</label>
+                            <input type="date" class="form-control" aria-label="Fecha Vencimiento"
+                                [(ngModel)]="newSupply.expireDate" name="expireDate" required>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Crear</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Modal para mostrar datos del insumo creado -->
+                <div class="modal fade show d-block" *ngIf="showModal" tabindex="-1"
+                    style="background-color: rgba(0,0,0,0.5);">
+                    <div class="card custom-card mx-auto mt-5" style="max-width: 600px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Insumos</h5>
+                            <div class="row g-3" *ngIf="createdSupply">
+                                <div class="col-sm-6">
+                                    <strong>Código:</strong> {{createdSupply.supplyCode}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Producto:</strong> {{createdSupply.supplyName}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Tipo:</strong> {{createdSupply.supplyType}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Unidad:</strong> {{createdSupply.unit}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Cantidad por Unidad:</strong> {{createdSupply.qtyPerUnit}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Costo:</strong> ${{createdSupply.cost}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>F. Compra:</strong> {{createdSupply.buyDate}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>F. Vto:</strong> {{createdSupply.expireDate}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 d-flex justify-content-center mt-4">
+                                <button class="btn btn-warning" (click)="closeModal()">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

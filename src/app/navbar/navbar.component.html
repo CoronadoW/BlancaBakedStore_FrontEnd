@@ -1,0 +1,57 @@
+<div class="my-element">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="/product">Blanca Panificación</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" [routerLink]="'/product'">Ventas</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/cash-balance'">Caja</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/resale-product'">Productos de Reventa</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/supply'">Insumos</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/recipe'">Costos por Receta</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/pre-seller'">Proveedores</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="role === 'ADMIN'">
+                        <a class="nav-link active" [routerLink]="'/admin-users'">Adm. Usuarios</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <span *ngIf="isAuthenticated" class="me-3 text-secondary fw-bold">
+                Bienvenido/a: {{user}}
+            </span>
+
+            <button type="button" class="btn btn-outline-warning me-3" [disabled]="isAuthenticated"><a
+                    class="nav-link active" [routerLink]="['/login']" href="#">Iniciar Sesión</a></button>
+
+            <button type="button" class="btn btn-outline-warning" [disabled]="!isAuthenticated" (click)="logout()"><a
+                    class="nav-link active" href="#">Cerrar Sesión</a></button>
+        </div>
+    </nav>
+</div>

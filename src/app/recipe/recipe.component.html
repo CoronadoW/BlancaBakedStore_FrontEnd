@@ -1,0 +1,287 @@
+<div class="my-element">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Columna de la tabla (75%) -->
+            <div class="col-md-8 d-flex align-items-start">
+
+                <div class=" card flex-grow-1 p-3">
+                    <h3 class="text-center">Costos por Receta</h3>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Receta</th>
+                                        <th scope="col">M.Marcación</th>
+                                        <th scope="col">Unidades</th>
+                                        <th scope="col">Ingredientes</th>
+                                        <th scope="col">Packaging</th>
+                                        <th scope="col">Costo Variable</th>
+                                        <th scope="col">Costo Unitario</th>
+                                        <th scope="col">Precio Efectivo</th>
+                                        <th scope="col">Ganancia</th>
+                                        <th scope="col">Porc. Ingred.</th>
+                                        <th scope="col">Porc.Packaging</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let recipe of recipes" (click)="openModal(recipe)">
+                                        <th scope="row">{{ recipe.recipeName }}</th>
+                                        <td>{{ recipe.markingMargin }}%</td>
+                                        <td>{{ recipe.unitsPerRecipe }}</td>
+                                        <td>{{ recipe.ingreVarCost | currency }}</td>
+                                        <td>{{ recipe.packVarCost | currency }}</td>
+                                        <td>{{ recipe.variableCost | currency }}</td>
+                                        <td>{{ recipe.unitTotalVarCost | currency }}</td>
+                                        <td>{{ recipe.effectivePrice | currency }}</td>
+                                        <td>{{ recipe.profit | currency }}</td>
+                                        <td>{{ recipe.ingrePercent }}%</td>
+                                        <td>{{ recipe.packagingPercent}}%</td>
+                                        <td>
+                                            <button (click)="deleteRecipe(recipe); $event.stopPropagation()"
+                                                class="btn btn-warning btn-sm">Eliminar
+                                                Receta</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column of form (25%) -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+
+                <!-- Card buscar Recipe -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Buscar Receta</h5>
+                    <form (ngSubmit)="searchRecipeByName(recipe.recipeName)" class="row g-3">
+                        <div class="col-sm-12">
+                            <input type="text" id="codigoInput" class="form-control text-center"
+                                placeholder="Nombre de la receta" aria-label="Nombre de la receta"
+                                [(ngModel)]="recipe.recipeName" name="recipeName">
+                        </div>
+
+                        <div class="col-sm-6 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning" (click)="clearRecipeName()">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Card to charge Recipe -->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Crear Receta y Cargar Insumos</h5>
+
+                    <form (ngSubmit)="createRecipe()" class="row g-3">
+
+                        <div class="col-sm-6">
+                            <label for="recipeName">Nombre de la Receta</label>
+                            <input type="text" required class="form-control" [(ngModel)]="recipeDto.recipeName"
+                                name="recipeName">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="markingMarginDto">% Margen de marcación</label>
+                            <input type="number" required class="form-control" [(ngModel)]="recipeDto.markingMarginDto"
+                                name="markingMarginDto">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="unitsPerRecipeDto">Unidades por receta</label>
+                            <input type="number" required class="form-control" [(ngModel)]="recipeDto.unitsPerRecipeDto"
+                                name="unitsPerRecipeDto">
+                        </div>
+
+                        <!-- Dynamic supplies -->
+                        <div class="col-sm-12">
+                            <h6>Insumos</h6>
+                            <div *ngFor="let supply of recipeDto.suppPerRecipeDtoList; let i = index"
+                                class="row g-2 mb-2">
+                                <div class="col-4">
+                                    <label for="suppNameDto">Insumo</label>
+                                    <input type="text" class="form-control" [(ngModel)]="supply.suppNameDto"
+                                        name="name{{i}}">
+                                </div>
+                                <div class="col-3">
+                                    <label for="utilizedDto">Utilizado</label>
+                                    <input type="number" class="form-control" [(ngModel)]="supply.utilizedDto"
+                                        name="utilized{{i}}">
+                                </div>
+                                <div class="col-3">
+                                    <label for="wasteDto">% Desperdicio</label>
+                                    <input type="number" class="form-control" [(ngModel)]="supply.wasteDto"
+                                        name="waste{{i}}">
+                                </div>
+                                <div class="col-2 d-flex align-items-center">
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        (click)="removeSupply(i)">Eliminar</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addSupply()">Agregar
+                                Insumo</button>
+                        </div>
+
+                        <div class="col-sm-6 d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-warning">Crear
+                                Receta</button>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-center mt-3">
+                            <button type="button" class="btn btn-warning" (click)="clearForm()">Limpiar</button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <!--Modal to show Recipe Cost-->
+                <div class="modal fade show d-block bg-dark bg-opacity-50" *ngIf="showModal">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content rounded-4 shadow">
+
+                            <div class="modal-header bg-warning text-white rounded-top-4">
+                                <h5 class="modal-title">Detalle de Receta: {{ createdRecipe?.recipeName }}</h5>
+                                <button type="button" class="btn-close" (click)="closeModal()"></button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Margen de Marcación:</strong> {{ createdRecipe?.markingMargin }}%
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Unidades por Receta:</strong> {{ createdRecipe?.unitsPerRecipe }}
+                                    </div>
+                                </div>
+
+                                <h6 class="mt-3">Detalle de Insumos</h6>
+                                <table class="table table-sm table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Utilizado</th>
+                                            <th>Desperdicio %</th>
+                                            <th>Costo por Receta</th>
+                                            <th>Costo Unitario</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let detail of createdRecipe?.recipeDetailList">
+                                            <td>{{ detail.suppName }}</td>
+                                            <td>{{ detail.suppType }}</td>
+                                            <td>{{ detail.qtyUtilized }}</td>
+                                            <td>{{ detail.waste }}</td>
+                                            <td>{{ detail.costPerRecipe | currency }}</td>
+                                            <td>{{ detail.unitCostPerSupp | currency }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <h6>Costos Variables</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Ingredientes: {{ createdRecipe?.ingreVarCost |
+                                                currency
+                                                }} ({{
+                                                createdRecipe?.ingrePercent }}%)</li>
+                                            <li class="list-group-item">Empaque: {{ createdRecipe?.packVarCost |
+                                                currency }}
+                                                ({{
+                                                createdRecipe?.packagingPercent }}%)</li>
+                                            <li class="list-group-item">Mano de Obra: {{ createdRecipe?.laborVarCost |
+                                                currency
+                                                }} ({{
+                                                createdRecipe?.variableLaborPercent }}%)</li>
+                                            <li class="list-group-item">Costo Variable Total: {{
+                                                createdRecipe?.variableCost
+                                                |
+                                                currency
+                                                }} ({{ createdRecipe?.variableCostPercent }}%)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Resumen</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Precio Efectivo: {{
+                                                createdRecipe?.effectivePrice |
+                                                currency }}
+                                            </li>
+                                            <li class="list-group-item">Contribución Marginal: {{
+                                                createdRecipe?.marginalContribution |
+                                                currency }} ({{ createdRecipe?.marginalContribPercent }}%)</li>
+                                            <li class="list-group-item">Distribución de Costos Fijos: {{
+                                                createdRecipe?.fixCostDistribution | currency }} ({{
+                                                createdRecipe?.fixCostDistribPercent }}%)</li>
+                                            <li class="list-group-item">Ganancia: {{ createdRecipe?.profit | currency }}
+                                                ({{
+                                                createdRecipe?.profitPercent }}%)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--Card to show Fix Cost Incidence in use-->
+                <div class="card p-3 w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h5 class="text-center">Incidencia de Costos Fijos en Uso</h5>
+                    <div class="row g-3">
+                        <div class="col-sm-12" *ngIf="createdFinAn">
+                            <strong>Costo Fijo Normal:</strong> {{createdFinAn.normalFixCost}}
+                        </div>
+                        <div class="col-sm-12">
+                            <strong>Promedio Normal de Ventas:</strong> {{createdFinAn?.normalSaleAverage}}
+                        </div>
+                        <div class="col-sm-12">
+                            <strong>Incidencia de Costos Fijos:</strong> {{createdFinAn?.fixCostIncidence}}%
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Card to create Incidence Cost -->
+                <form (ngSubmit)="createFinancialAnalysis()">
+                    <div class="card p-3 mb-3 d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="text-center">Crear Incidencia Costos Fijos</h5>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="normalFixCostDto">Costos fijos normales</label>
+                                <input type="number" id="codigoInput" class="form-control text-center"
+                                    aria-label="Costos  Fijos Normales" [(ngModel)]="finAnDto.normalFixCostDto"
+                                    name="normalFixCostDto">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="normalSaleAverageDto">Promedio de ventas</label>
+                                <input type="number" id="codigoInput" class="form-control text-center"
+                                    aria-label="Promedio de Ventas" [(ngModel)]="finAnDto.normalSaleAverageDto"
+                                    name="normalSaleAverageDto">
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-center">
+                                <button type="submit" class="btn btn-warning">Crear</button>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-center mt-3">
+                                <button type="button" class="btn btn-warning"
+                                    (click)="clearFinAnForm()">Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
