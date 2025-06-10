@@ -178,9 +178,6 @@ export class ProductComponent implements OnInit {
     });
   }
 
-
-
-
   isExpDtoValid(productCode: unknown, stock: unknown, buyDate: unknown, expireDate: unknown): boolean {
     if (typeof productCode !== 'number' || typeof stock !== 'number' || typeof buyDate !== 'string' || typeof expireDate !== 'string') {
       alert('Debe completar correctamente todos los campos.')
@@ -190,12 +187,12 @@ export class ProductComponent implements OnInit {
   }
 
   // Method to turn into Red or Orange the expireDate depending its period
-  getExpireDateClass(nearestExpireDate: string | null): string {
-    if (!nearestExpireDate) {
-      return '';
+  getExpireDateClass(nearestExpireDate: string | null | undefined, stock: number | null | undefined): string {
+    if (!nearestExpireDate || stock === 0) {
+      return 'text-muted'; //grey if there isn't stock.
     }
 
-    // Convertir de "dd-MM-yyyy" a "yyyy-MM-dd"
+    // Convert from "dd-MM-yyyy" to "yyyy-MM-dd"
     const parts = nearestExpireDate.split('-');
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     const expireDate = new Date(formattedDate);

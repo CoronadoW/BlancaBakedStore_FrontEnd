@@ -180,9 +180,9 @@ export class ResaleProductComponent implements OnInit {
   }
 
   // Method to turn into Red or Orange the expireDate depending its period
-  getExpireDateClass(nearestExpireDate: string | null): string {
-    if (!nearestExpireDate) {
-      return '';
+  getExpireDateClass(nearestExpireDate: string | null, stock: number | null): string {
+    if (!nearestExpireDate || stock === 0) {
+      return 'text-muted';
     }
 
     // Convertir de "dd-MM-yyyy" a "yyyy-MM-dd"

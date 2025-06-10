@@ -39,7 +39,7 @@
                                         <td>{{ product.stock }}</td>
 
                                         <td [ngClass]="getExpireDateClass(product.
-                                nearestExpireDate)">
+                                nearestExpireDate, product.stock)">
                                             {{ product.nearestExpireDate}}
                                         </td>
 
@@ -201,7 +201,8 @@
                             <div class="col-sm-5 d-flex align-items-center gap-2">
                                 <label for="nearestExpireDate" class="col-auto">Prox. Vencimiento:</label>
                                 <input type="text" class="form-control text-end" [ngClass]="getExpireDateClass(resProdWithNearExp.
-                                nearestExpireDate)" [(ngModel)]="resProdWithNearExp.nearestExpireDate" readonly>
+                                nearestExpireDate, resProdWithNearExp.stock)"
+                                    [(ngModel)]="resProdWithNearExp.nearestExpireDate" readonly>
                             </div>
 
                             <div class="col-sm-6 d-flex align-items-center gap-3 mb-2">

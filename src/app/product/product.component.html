@@ -27,7 +27,7 @@
                                     <th class="text-center" scope="row">{{ product.salePrice }}</th>
                                     <td class="text-center">{{ product.stock }}</td>
                                     <td class="text-center" [ngClass]="getExpireDateClass(product.
-                                nearestExpireDate)">{{ product.nearestExpireDate }}</td>
+                                nearestExpireDate, product.stock)">{{ product.nearestExpireDate }}</td>
                                 </tr>
                             </tbody>
 
@@ -155,6 +155,7 @@
                                         <div class="col-sm-12 d-flex align-items-center gap-2">
                                             <label for="expireDate" class="col-auto"> Prox. venc.:</label>
                                             <input type="text" class="form-control text-end flex-grow-1"
+                                                [ngClass]="getExpireDateClass(resProdNearExp.nearestExpireDate, resProdNearExp.stock)"
                                                 [(ngModel)]="resProdNearExp.nearestExpireDate" name="expireDate">
                                         </div>
                                     </div>
